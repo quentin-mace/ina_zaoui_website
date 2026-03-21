@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ina_zaoui
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+    # 3306 est souvent pris par MySQL/MariaDB sur l’hôte ; 3307 → MySQL dans le conteneur (3306)
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:
