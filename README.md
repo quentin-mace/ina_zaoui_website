@@ -1,10 +1,10 @@
 # Ina Zaoui
 
-Application Symfony 5.4 (PHP ≥ 8.0).
+Application Symfony 7.4 (PHP ≥ 8.4).
 
 ## Prérequis
 
-- PHP 8.0 ou plus, avec les extensions requises par Composer (`ctype`, `iconv`, etc.)
+- PHP 8.4 ou plus, avec les extensions requises par Composer (`ctype`, `iconv`, etc.)
 - [Composer](https://getcomposer.org/)
 - [Docker](https://docs.docker.com/get-docker/) (pour lancer MySQL via le fichier `compose.yml`)
 
@@ -30,15 +30,32 @@ Application Symfony 5.4 (PHP ≥ 8.0).
    docker compose up -d
    ```
 
-4. **Créer les tables** (base vide) :
+4. **Créer la base de données** (si besoin) :
 
    ```bash
-   php bin/console doctrine:schema:update --force
+   php bin/console doctrine:database:create --if-not-exists
    ```
 
-   **Optionnel** : un dump SQL anonymisé et les fichiers `public/uploads` peuvent être récupérés depuis `backup.zip` (fichier volumineux, > 1 Go).
+5. **Appliquer les migrations** (création du schéma) :
 
-5. **Lancer l’application en dev** (au choix) :
+   ```bash
+   php bin/console doctrine:migrations:migrate -n
+   ```
+
+6. **Charger des données de dev (fixtures + uploads)** :
+
+   Requiert `doctrine/doctrine-fixtures-bundle` (installé en dépendance `require-dev`).
+
+   ```bash
+   php bin/console doctrine:fixtures:load -n
+   ```
+
+   Ensuite, télécharger [ce dossier](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/876_DA_PHP_Sf_V2/P15/backup.zip) et 
+   copiez le contenu de `uploads` dans `public/uploads`. 
+
+   ⚠️ **Attention** : Ces fichiers ne doivent pas être commités.
+
+7. **Lancer l’application en dev** (au choix) :
 
    ```bash
    symfony server:start
