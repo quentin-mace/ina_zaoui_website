@@ -1,0 +1,38 @@
+---
+description: Format des descriptions de Pull Request quand l’utilisateur en demande une (PR vers dev, résumé de branche, etc.)
+alwaysApply: true
+---
+
+# Descriptions de Pull Request
+
+Quand l’utilisateur demande une **description de PR**, un **résumé pour une merge request**, ou l’équivalent (souvent branche courante → `dev` ou autre base) :
+
+1. **Analyser le dépôt** : comparer la branche à la base cible (`git log` / `git diff` si nécessaire) pour que le contenu soit factuel.
+2. **Langue** : rédiger en **français**.
+3. **Livrable** : une **seule réponse** constituée d’un **bloc Markdown fenced** (triple backticks + `markdown`) **prêt à copier-coller** dans GitHub/GitLab — pas de texte hors du bloc sauf une phrase d’introduction minimale si utile.
+4. **Ton du texte** : **ne pas** utiliser de méta-formulations du type « cette PR », « cette merge request », ni mentionner explicitement la base de comparaison (ex. « par rapport à `dev` », « base : … »). Rester sur une **description factuelle** des changements et du périmètre, comme si le lecteur voyait déjà le contexte Git.
+
+## Structure obligatoire du bloc
+
+Le bloc doit suivre exactement cette ossature (adapter le contenu aux changements réels ; la checklist doit refléter les risques de la PR) :
+
+```markdown
+## Résumé
+
+(Une à trois phrases : objectif des changements et périmètre, sans méta-référence à la PR ni à la branche de base.)
+
+## Changements principaux
+
+- **Zone / thème** : ce qui a été fait (puces concises, regroupées par domaine technique ou fonctionnel).
+
+## À vérifier avant merge
+
+- [ ] Point actionnable lié aux migrations, config, tests, déploiement, etc.
+- [ ] …
+```
+
+## Style
+
+- **Succinct** : pas de roman ; privilégier des puces claires.
+- **Pas de section “Commits”** sauf demande explicite.
+- Si la base n’est pas précisée pour l’analyse Git, **supposer `dev`** — **sans** le citer dans le texte livré (voir point 4 ci-dessus).
