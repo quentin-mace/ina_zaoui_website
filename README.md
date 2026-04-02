@@ -69,7 +69,11 @@ Application Symfony 7.4 (PHP ≥ 8.4).
 
    Ouvrir l’URL indiquée (souvent `http://127.0.0.1:8000`).
 
-## Compte de démo
+## Compte de démo (admin)
 
-- Identifiant : `ina`  
-- Mot de passe : `password`
+Après `doctrine:fixtures:load`, un compte administrateur est disponible :
+
+- **E-mail** : `ina@zaoui.com`  
+- **Mot de passe** : `password`
+
+Les invités de démo utilisent le même mot de passe (`password`) avec des adresses du type `invite+0@example.com`, etc.
