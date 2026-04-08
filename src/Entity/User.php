@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(options: ['default' => true])]
+    private bool $hasAccess = true;
+
     public function __construct()
     {
         $this->medias = new ArrayCollection();
@@ -145,5 +148,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    public function hasAccess(): ?bool
+    {
+        return $this->hasAccess;
+    }
+
+    public function setHasAccess(bool $hasAccess): static
+    {
+        $this->hasAccess = $hasAccess;
+
+        return $this;
     }
 }
