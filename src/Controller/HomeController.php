@@ -22,7 +22,7 @@ class HomeController extends AbstractController
     #[Route('/guests', name: 'guests')]
     public function guests(UserRepository $userRepository)
     {
-        $guests = $userRepository->findBy(['admin' => false]);
+        $guests = $userRepository->findBy(['admin' => false, 'hasAccess' => true]);
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
