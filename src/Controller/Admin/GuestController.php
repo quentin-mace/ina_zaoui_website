@@ -15,10 +15,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class GuestController extends AbstractController
 {
-    /**
-     * Suppression d’un invité : les Media liés sont supprimés en cascade (entités + fichiers sur disque),
-     * conformément au périmètre produit (confirmation côté client avant l’appel DELETE).
-     */
     #[Route('/admin/guest', name: 'admin_guest_index')]
     public function index(UserRepository $userRepository): Response
     {
