@@ -1,0 +1,56 @@
+---
+description: Format des descriptions d’issue / ticket quand l’utilisateur en demande une
+alwaysApply: true
+---
+
+# Descriptions d’issue
+
+Quand l’utilisateur demande une **description d’issue**, un **ticket**, une **spécification pour GitHub/GitLab/Jira**, ou l’équivalent :
+
+1. **Analyser le dépôt** si nécessaire (`git`, recherche dans le code) pour que le contenu soit **factuel** (fichiers, patterns existants, conventions).
+2. **Langue** : rédiger en **français**.
+3. **Livrable** : une **seule réponse** constituée d’un **bloc Markdown fenced** ouvrant par ` ```markdown ` et fermant par ` ``` `, **prêt à copier-coller** — pas de texte hors du bloc sauf une phrase d’introduction **minimale** si utile.
+4. **Ton** : description **factuelle** du besoin et du périmètre ; éviter les formulations vagues (« il faudrait penser à… ») au profit de critères vérifiables.
+
+## Structure obligatoire du bloc
+
+Le bloc doit suivre cette ossature (adapter les sections au sujet ; retirer ou fusionner des sections si le ticket est minuscule) :
+
+```markdown
+## Titre
+
+**…**
+
+## Contexte
+
+…
+
+## Objectif
+
+…
+
+## Périmètre fonctionnel
+
+- …
+
+## Sécurité et règles métier
+
+(ou « Contraintes techniques » — uniquement si pertinent.)
+
+- …
+
+## Critères d’acceptation
+
+- [ ] …
+- [ ] …
+
+## Hors périmètre
+
+(« À trancher si besoin » — optionnel.)
+```
+
+## Style
+
+- **Succinct** : puces claires, pas de roman.
+- Les **titres de sections** (`## …`) dans le bloc livré doivent rester ceux du gabarit ci-dessus (contenu à adapter, pas la structure de titres sauf demande contraire).
+- Si l’utilisateur impose un gabarit ou un outil (Jira, template interne), **prioriser sa demande** tout en conservant le livrable en **un seul bloc** `markdown` copiable.
