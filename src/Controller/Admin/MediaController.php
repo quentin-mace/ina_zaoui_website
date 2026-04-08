@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MediaController extends AbstractController
 {
+    #[Route('/admin', name: 'admin_index')]
     #[Route('/admin/media', name: 'admin_media_index')]
     public function index(Request $request, MediaRepository $mediaRepository)
     {

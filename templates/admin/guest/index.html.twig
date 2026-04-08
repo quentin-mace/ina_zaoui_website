@@ -1,0 +1,47 @@
+{% extends 'admin.html.twig' %}
+
+{% block admin %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label == 'error' ? 'danger' : label }}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Invités</h1>
+        <a href="{{ path('admin_guest_add') }}" class="btn btn-primary">Ajouter</a>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nom</th>
+            <th>Accès actif</th>
+            <th>Médias</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for guest in guests %}
+            <tr>
+                <td>{{ guest.email }}</td>
+                <td>{{ guest.name ?? '—' }}</td>
+                <td>{{ guest.hasAccess ? 'Oui' : 'Non' }}</td>
+                <td>{{ guest.medias|length }}</td>
+                <td>
+                    <a href="{{ path('admin_guest_update', {id: guest.id}) }}" class="btn btn-warning">Modifier</a>
+                    <a href="{{ path('admin_guest_delete', {id: guest.id}) }}"
+                       class="btn btn-danger"
+                       onclick="return confirm({{ (
+                           guest.medias|length > 0
+                           ? 'Supprimer cet invité et ses ' ~ guest.medias|length ~ ' média(s) associé(s) ? Cette action est irréversible.'
+                           : 'Supprimer cet invité ?'
+                       )|json_encode|e('html_attr') }});">
+                        Supprimer
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
