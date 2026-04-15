@@ -45,7 +45,9 @@ class UserFixtures extends Fixture
             $guest->setDescription("Le maître de l'urbanité capturée, explore les méandres des cités avec un regard vif et impétueux, figeant l'énergie des rues dans des instants éblouissants. À travers une technique avant-gardiste, il métamorphose le béton et l'acier en toiles abstraites, révélant l'essence même de l'architecture moderne. Ses clichés transcendent les formes familières pour révéler des perspectives inattendues, offrant une vision nouvelle et captivante du monde urbain.");
             $guest->setEmail("invite+$i@example.com");
             $guest->setPassword($this->passwordHasher->hashPassword($guest, "password"));
-
+            if ($i % 2 === 0) {
+                $guest->setHasAccess(false);
+            }
             $this->manager->persist($guest);
         }
     }
