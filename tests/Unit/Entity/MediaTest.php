@@ -1,0 +1,68 @@
+<?php
+
+namespace App\Tests\Unit\Entity;
+
+use App\Entity\Album;
+use App\Entity\Media;
+use App\Entity\User;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
+class MediaTest extends TestCase
+{
+    public function testIsTrue(): void
+    {
+        $media = new Media();
+        $user = new User();
+        $album = new Album();
+        $file = new UploadedFile('public/uploads/0001.jpg', 'test');
+
+        $media->setPath('public/uploads/0001.jpg');
+        $media->setTitle('test');
+        $media->setUser($user);
+        $media->setAlbum($album);
+        $media->setFile($file);
+
+        $this->assertTrue($media->getPath() === 'public/uploads/0001.jpg');
+        $this->assertTrue($media->getTitle() === 'test');
+        $this->assertTrue($media->getUser() === $user);
+        $this->assertTrue($media->getAlbum() === $album);
+        $this->assertTrue($media->getId() === null);
+        $this->assertTrue($media->getFile() === $file);
+    }
+
+    public function testIsFalse(): void
+    {
+        $media = new Media();
+        $user = new User();
+        $album = new Album();
+        $file = new UploadedFile('public/uploads/0001.jpg', 'test');
+
+        $media->setPath('public/uploads/0001.jpg');
+        $media->setTitle('test');
+        $media->setUser($user);
+        $media->setAlbum($album);
+        $media->setFile($file);
+
+        $this->assertFalse($media->getPath() === 'false');
+        $this->assertFalse($media->getTitle() === 'false');
+        $this->assertFalse($media->getUser() === new User());
+        $this->assertFalse($media->getAlbum() === new Album());
+        $this->assertFalse($media->getId() === !null);
+        $this->assertFalse($media->getFile() === new UploadedFile('public/uploads/0002.jpg', 'test'));
+    }
+
+    public function testIsEmpty(): void
+    {
+        $media = new Media();
+        $media->setPath('');
+        $media->setTitle('');
+
+        $this->assertEmpty($media->getPath());
+        $this->assertEmpty($media->getTitle());
+        $this->assertEmpty($media->getId());
+        $this->assertEmpty($media->getUser());
+        $this->assertEmpty($media->getAlbum());
+        $this->assertEmpty($media->getFile());
+    }
+}
