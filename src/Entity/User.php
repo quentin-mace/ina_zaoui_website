@@ -140,6 +140,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    #[\Deprecated]
     public function eraseCredentials(): void
     {
 
