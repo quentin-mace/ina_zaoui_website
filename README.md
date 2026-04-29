@@ -1,6 +1,25 @@
 # Ina Zaoui
 
+[![PHP](https://img.shields.io/badge/PHP-8.4%2B-777BB4?logo=php&logoColor=white)](https://www.php.net/)
+[![Symfony](https://img.shields.io/badge/Symfony-7.4-000000?logo=symfony&logoColor=white)](https://symfony.com/)
+[![Docker Compose](https://img.shields.io/badge/Docker%20Compose-v2-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
+[![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![PHPUnit](https://img.shields.io/badge/PHPUnit-tests-366488?logo=php&logoColor=white)](https://phpunit.de/)
+
 Site vitrine et portfolio (photographe), avec un espace d’administration pour gérer invités et médias. Application **Symfony 7.4** (PHP ≥ 8.4).
+
+## Sommaire
+
+- [Prérequis](#prérequis)
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Démarrer / arrêter l’environnement (Docker)](#démarrer--arrêter-lenvironnement-docker)
+  - [Lancer l’application en développement](#lancer-lapplication-en-développement)
+  - [Base de données (Doctrine)](#base-de-données-doctrine)
+  - [Données de dev (fixtures + uploads)](#données-de-dev-fixtures--uploads)
+- [Compte de démo (admin)](#compte-de-démo-admin)
+- [Tests](#tests)
+- [Crédits](#crédits)
 
 ## Prérequis
 
@@ -10,7 +29,9 @@ Site vitrine et portfolio (photographe), avec un espace d’administration pour 
 
 **Optionnel** : [Symfony CLI](https://symfony.com/download) pour lancer le serveur de développement avec `symfony server:start` (sinon le serveur intégré PHP suffit, voir plus bas).
 
-## Installation sur une nouvelle machine
+## Installation
+
+Ces étapes installent les dépendances PHP, démarrent la base MySQL (Docker) et initialisent le schéma.
 
 1. **Cloner** le dépôt, puis à la racine du projet :
 
@@ -48,31 +69,64 @@ Site vitrine et portfolio (photographe), avec un espace d’administration pour 
    php bin/console doctrine:migrations:migrate -n
    ```
 
-6. **Charger des données de dev (fixtures + uploads)** :
+## Usage
 
-   Requiert `doctrine/doctrine-fixtures-bundle` (installé en dépendance `require-dev`).
+### Démarrer / arrêter l’environnement (Docker)
 
-   ```bash
-   php bin/console doctrine:fixtures:load -n
-   ```
+- **Démarrer MySQL + Adminer** :
 
-   Ensuite, téléchargez [cette archive](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/876_DA_PHP_Sf_V2/P15/backup.zip), extrayez-la et **copiez** le contenu du dossier `uploads` dans `public/uploads`.
+  ```bash
+  docker compose up -d
+  ```
 
-   **Attention** : ne pas versionner le contenu de `public/uploads` (fichiers médias locaux).
+- **Voir les logs** :
 
-7. **Lancer l’application en dev** (au choix) :
+  ```bash
+  docker compose logs -f
+  ```
 
-   ```bash
-   symfony server:start
-   ```
+- **Arrêter** :
 
-   ou, sans Symfony CLI :
+  ```bash
+  docker compose down
+  ```
 
-   ```bash
-   php -S 127.0.0.1:8000 -t public
-   ```
+### Lancer l’application en développement
 
-   Ouvrir l’URL indiquée (souvent `http://127.0.0.1:8000`).
+Au choix :
+
+```bash
+symfony server:start
+```
+
+ou, sans Symfony CLI :
+
+```bash
+php -S 127.0.0.1:8000 -t public
+```
+
+Ouvrir l’URL indiquée (souvent `http://127.0.0.1:8000`).
+
+### Base de données (Doctrine)
+
+Après démarrage de MySQL (Docker) :
+
+```bash
+php bin/console doctrine:database:create --if-not-exists
+php bin/console doctrine:migrations:migrate -n
+```
+
+### Données de dev (fixtures + uploads)
+
+Requiert `doctrine/doctrine-fixtures-bundle` (installé en dépendance `require-dev`).
+
+```bash
+php bin/console doctrine:fixtures:load -n
+```
+
+Ensuite, téléchargez [cette archive](https://s3.eu-west-1.amazonaws.com/course.oc-static.com/projects/876_DA_PHP_Sf_V2/P15/backup.zip), extrayez-la et **copiez** le contenu du dossier `uploads` dans `public/uploads`.
+
+**Attention** : ne pas versionner le contenu de `public/uploads` (fichiers médias locaux).
 
 ## Compte de démo (admin)
 
@@ -116,3 +170,9 @@ En `APP_ENV=test`, **`DATABASE_URL` est défini dans `.env.test`** (base `ina_za
    ```
 
 Les médias référencés par les fixtures pointent vers des chemins du type `public/uploads/….jpg`. Pour des vérifications manuelles ou des tests qui servent ces fichiers, réutilisez la même étape que pour le dev (archive S3 + copie du dossier `uploads` dans `public/uploads`).
+
+## Crédits
+
+Projet réalisé dans le cadre du cours **« Refactorisez le code d'un site pour l'optimiser »** du parcours **Concepteur Développeur d’Application** (OpenClassrooms).
+
+Le code de base a été fourni par OpenClassrooms via le dépôt : `https://github.com/OpenClassrooms-Student-Center/876-p15-inazaoui`.
