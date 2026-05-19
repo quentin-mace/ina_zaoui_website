@@ -10,9 +10,15 @@ use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 class HomeController extends AbstractController
 {
+    public function __construct(
+        private TagAwareCacheInterface $cache,
+    ){
+    }
     #[Route('/', name: 'home')]
     public function home()
     {
@@ -22,7 +28,12 @@ class HomeController extends AbstractController
     #[Route('/guests', name: 'guests')]
     public function guests(UserRepository $userRepository)
     {
-        $guests = $userRepository->findAuthorizedGuests();
+        $guests = $this->cache->get('guests', function (ItemInterface $item) use ($userRepository) {
+            $item->expiresAfter(3600);
+            $item->tag('guests');
+
+            return $userRepository->findAuthorizedGuests();
+        });
         return $this->render('front/guests.html.twig', [
             'guests' => $guests
         ]);
@@ -31,7 +42,14 @@ class HomeController extends AbstractController
     #[Route('/guest/{id}', name: 'guest')]
     public function guest(int $id, UserRepository $userRepository)
     {
-        $guest = $userRepository->find($id);
+        $cacheItemName = 'guest_' . $id;
+        $guest = $this->cache->get($cacheItemName, function (ItemInterface $item) use ($id, $userRepository) {
+            $item->expiresAfter(3600);
+            $item->tag('guests');
+
+            return $userRepository->findWithAssociatedMedia($id);
+        });
+
         return $this->render('front/guest.html.twig', [
             'guest' => $guest
         ]);
@@ -48,9 +66,17 @@ class HomeController extends AbstractController
         $album = $id ? $albumRepository->find($id) : null;
         $user = $userRepository->findOneByAdmin(true);
 
-        $medias = $album
-            ? $mediaRepository->findByAlbum($album)
-            : $mediaRepository->findByUser($user);
+        $inaAlbumCacheName = 'inaMedias_' . $album?->getId() ?? 'global';
+
+        $medias = $this->cache->get($inaAlbumCacheName, function (ItemInterface $item) use ($mediaRepository, $album, $user) {
+            $item->expiresAfter(3600);
+            $item->tag('ina');
+
+            return $album
+                ? $mediaRepository->findByAlbum($album)
+                : $mediaRepository->findByUser($user);
+        });
+
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
             'album' => $album,
