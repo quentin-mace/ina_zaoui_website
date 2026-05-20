@@ -10,12 +10,13 @@ use App\Repository\AlbumRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AlbumController extends AbstractController
 {
     #[Route('/admin/album', name: 'admin_album_index')]
-    public function index(AlbumRepository $albumRepository)
+    public function index(AlbumRepository $albumRepository): Response
     {
         $albums = $albumRepository->findAll();
 
@@ -23,7 +24,7 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/admin/album/add', name: 'admin_album_add')]
-    public function add(Request $request, EntityManagerInterface $entityManager)
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $album = new Album();
         $form = $this->createForm(AlbumType::class, $album);
@@ -40,7 +41,7 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/admin/album/update/{id}', name: 'admin_album_update')]
-    public function update(Request $request, int $id, AlbumRepository $albumRepository, EntityManagerInterface $entityManager)
+    public function update(Request $request, int $id, AlbumRepository $albumRepository, EntityManagerInterface $entityManager): Response
     {
         $album = $albumRepository->find($id);
         $form = $this->createForm(AlbumType::class, $album);
@@ -56,7 +57,7 @@ class AlbumController extends AbstractController
     }
 
     #[Route('/admin/album/delete/{id}', name: 'admin_album_delete')]
-    public function delete(int $id, AlbumRepository $albumRepository, EntityManagerInterface $entityManager)
+    public function delete(int $id, AlbumRepository $albumRepository, EntityManagerInterface $entityManager): Response
     {
         $media = $albumRepository->find($id);
         $entityManager->remove($media);
