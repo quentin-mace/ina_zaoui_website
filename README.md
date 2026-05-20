@@ -5,6 +5,8 @@
 [![Docker Compose](https://img.shields.io/badge/Docker%20Compose-v2-2496ED?logo=docker&logoColor=white)](https://docs.docker.com/compose/)
 [![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![PHPUnit](https://img.shields.io/badge/PHPUnit-tests-366488?logo=php&logoColor=white)](https://phpunit.de/)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%206-8892BF?logo=php&logoColor=white)](https://phpstan.org/)
+[![PHP CS Fixer](https://img.shields.io/badge/PHP--CS--Fixer-PSR--12-8892BF?logo=php&logoColor=white)](https://cs.symfony.com/)
 
 Site vitrine et portfolio (photographe), avec un espace d’administration pour gérer invités et médias. Application **Symfony 7.4** (PHP ≥ 8.4).
 
@@ -19,6 +21,7 @@ Site vitrine et portfolio (photographe), avec un espace d’administration pour 
   - [Données de dev (fixtures + uploads)](#données-de-dev-fixtures--uploads)
 - [Compte de démo (admin)](#compte-de-démo-admin)
 - [Tests](#tests)
+- [Qualité du code](#qualité-du-code)
 - [Crédits](#crédits)
 
 ## Prérequis
@@ -170,6 +173,28 @@ En `APP_ENV=test`, **`DATABASE_URL` est défini dans `.env.test`** (base `ina_za
    ```
 
 Les médias référencés par les fixtures pointent vers des chemins du type `public/uploads/….jpg`. Pour des vérifications manuelles ou des tests qui servent ces fichiers, réutilisez la même étape que pour le dev (archive S3 + copie du dossier `uploads` dans `public/uploads`).
+
+## Qualité du code
+
+### PHPStan (analyse statique)
+
+Configuré via `phpstan.dist.neon` au **niveau 6**, avec l'extension Doctrine.
+
+```bash
+vendor/bin/phpstan analyse
+```
+
+### PHP CS Fixer (formatage)
+
+Configuré via `.php-cs-fixer.dist.php`.
+
+```bash
+# Vérifier sans modifier
+vendor/bin/php-cs-fixer check
+
+# Corriger automatiquement
+vendor/bin/php-cs-fixer fix
+```
 
 ## Crédits
 

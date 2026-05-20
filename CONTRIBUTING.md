@@ -88,8 +88,11 @@ depuis l'issue GitHub.
 Avant d’ouvrir la PR :
 
 - **Merge** la branche de référence dans votre branche si nécessaire (conflits par exemple).
-- Utiliser la méthode Boy-Scout ! Laisser le code dans un état plus propre qu'à votre arrivée.
-- Exécuter la checklist “Qualité” ci-dessous.
+- Utiliser la méthode Boy-Scout ! Laisser le code dans un état plus propre qu’à votre arrivée.
+- Exécuter la checklist “Qualité” ci-dessous :
+  - `vendor/bin/phpstan analyse` → zéro erreur
+  - `vendor/bin/php-cs-fixer check` → zéro diff
+  - `php bin/phpunit` → suite verte
 
 Dans la PR :
 
@@ -184,14 +187,25 @@ php bin/console lint:translation translations
 
 > Si une commande `lint:*` n’est pas disponible dans votre environnement, exécutez au minimum les tests et vérifiez la page concernée manuellement (profiler Symfony conseillé).
 
-### Analyse statique / formatage
+### Analyse statique (PHPStan)
 
-Le dépôt ne définit pas (à ce stade) de configuration versionnée pour PHPStan / Psalm / PHP-CS-Fixer.
+Configuré via `phpstan.dist.neon` au niveau 6, avec l’extension Doctrine. Aucune erreur ne doit être introduite.
 
-- Si vous introduisez l’un de ces outils, inclure :
-  - la configuration (ex. `phpstan.neon`, `.php-cs-fixer.dist.php`),
-  - des scripts Composer (`composer phpstan`, `composer cs:fix`, etc.),
-  - et l’intégrer à la checklist avant PR.
+```bash
+vendor/bin/phpstan analyse
+```
+
+### Formatage (PHP CS Fixer)
+
+Configuré via `.php-cs-fixer.dist.php`. Le code soumis doit respecter le style du projet.
+
+```bash
+# Vérifier sans modifier
+vendor/bin/php-cs-fixer check
+
+# Corriger automatiquement
+vendor/bin/php-cs-fixer fix
+```
 
 ## Gestion des fichiers et secrets
 
