@@ -78,7 +78,7 @@ class GuestController extends AbstractController
                 $guest->setAdmin(false);
                 $guest->setRoles([]);
                 $plain = $form->get('plainPassword')->getData();
-                if (\is_string($plain) && $plain !== '') {
+                if (\is_string($plain) && '' !== $plain) {
                     $guest->setPassword($passwordHasher->hashPassword($guest, $plain));
                 }
                 $entityManager->flush();

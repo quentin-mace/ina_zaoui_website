@@ -13,8 +13,8 @@ class AlbumTest extends TestCase
 
         $album->setName('test');
 
-        $this->assertTrue($album->getName() === 'test');
-        $this->assertTrue($album->getId() === null);
+        $this->assertTrue('test' === $album->getName());
+        $this->assertTrue(null === $album->getId());
     }
 
     public function testIsFalse(): void
@@ -23,7 +23,7 @@ class AlbumTest extends TestCase
 
         $album->setName('test');
 
-        $this->assertFalse($album->getName() === 'false');
+        $this->assertFalse('false' === $album->getName());
         $this->assertFalse(is_int($album->getId()));
     }
 

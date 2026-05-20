@@ -76,7 +76,7 @@ class PortfolioPageTest extends WebTestCase
         $foreign = $album2Medias[0];
         $inaGlobalCount = \count($mediaRepository->findBy(['user' => $ina]));
 
-        $crawler = $client->request('GET', '/portfolio/' . $album1->getId());
+        $crawler = $client->request('GET', '/portfolio/'.$album1->getId());
 
         self::assertResponseIsSuccessful();
 

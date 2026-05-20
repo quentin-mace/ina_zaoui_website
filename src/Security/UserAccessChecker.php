@@ -12,7 +12,7 @@ class UserAccessChecker implements UserCheckerInterface
 {
     public function checkPreAuth(UserInterface $user): void
     {
-        if (!$user instanceof User){
+        if (!$user instanceof User) {
             return;
         }
 
@@ -21,12 +21,9 @@ class UserAccessChecker implements UserCheckerInterface
         }
     }
 
-    /**
-     * @inheritDoc
-     */
     public function checkPostAuth(UserInterface $user, ?TokenInterface $token = null): void
     {
-        if (!$user instanceof User){
+        if (!$user instanceof User) {
             return;
         }
     }
