@@ -1,0 +1,66 @@
+name: "Bug report"
+description: "Signaler un comportement incorrect ou inattendu"
+title: "[Bug] "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte
+      description: "Décrivez le contexte dans lequel le bug apparaît (page, fonctionnalité, rôle utilisateur concerné, etc.)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: Comportement actuel
+      description: "Décrivez ce qui se passe actuellement."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Comportement attendu
+      description: "Décrivez ce qui devrait se passer à la place."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Procédure de reproduction
+      description: "Étapes précises pour reproduire le bug."
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Captures d'écran / logs
+      description: "Si applicable, ajoutez des captures d'écran ou des extraits de logs."
+      render: shell
+    validations:
+      required: false
+
+  - type: input
+    id: php_version
+    attributes:
+      label: Version PHP
+      placeholder: "ex. 8.4.x"
+    validations:
+      required: false
+
+  - type: input
+    id: browser
+    attributes:
+      label: Navigateur
+      placeholder: "ex. Firefox 126, Chrome 125"
+    validations:
+      required: false
