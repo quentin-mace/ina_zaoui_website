@@ -2,9 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Album;
-use App\Entity\Media;
-use App\Entity\User;
 use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
@@ -18,8 +15,9 @@ class HomeController extends AbstractController
 {
     public function __construct(
         private TagAwareCacheInterface $cache,
-    ){
+    ) {
     }
+
     #[Route('/', name: 'home')]
     public function home(): Response
     {
@@ -35,15 +33,16 @@ class HomeController extends AbstractController
 
             return $userRepository->findAuthorizedGuests();
         });
+
         return $this->render('front/guests.html.twig', [
-            'guests' => $guests
+            'guests' => $guests,
         ]);
     }
 
     #[Route('/guest/{id}', name: 'guest')]
     public function guest(int $id, UserRepository $userRepository): Response
     {
-        $cacheItemName = 'guest_' . $id;
+        $cacheItemName = 'guest_'.$id;
         $guest = $this->cache->get($cacheItemName, function (ItemInterface $item) use ($id, $userRepository) {
             $item->expiresAfter(3600);
             $item->tag('guests');
@@ -52,7 +51,7 @@ class HomeController extends AbstractController
         });
 
         return $this->render('front/guest.html.twig', [
-            'guest' => $guest
+            'guest' => $guest,
         ]);
     }
 
@@ -67,7 +66,7 @@ class HomeController extends AbstractController
         $album = $id ? $albumRepository->find($id) : null;
         $user = $userRepository->findOneByAdmin(true);
 
-        $inaAlbumCacheName = 'inaMedias_' . ($album?->getId() ?? 'global');
+        $inaAlbumCacheName = 'inaMedias_'.($album?->getId() ?? 'global');
 
         $medias = $this->cache->get($inaAlbumCacheName, function (ItemInterface $item) use ($mediaRepository, $album, $user) {
             $item->expiresAfter(3600);
@@ -81,7 +80,7 @@ class HomeController extends AbstractController
         return $this->render('front/portfolio.html.twig', [
             'albums' => $albums,
             'album' => $album,
-            'medias' => $medias
+            'medias' => $medias,
         ]);
     }
 

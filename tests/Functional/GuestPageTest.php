@@ -48,7 +48,7 @@ class GuestPageTest extends WebTestCase
         $foreignMedia = $mediaRepository->findOneBy(['user' => $otherGuest]);
         self::assertNotNull($foreignMedia);
 
-        $crawler = $client->request('GET', '/guest/' . $guest->getId());
+        $crawler = $client->request('GET', '/guest/'.$guest->getId());
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h3.mb-4', (string) $guest->getName());
@@ -67,7 +67,7 @@ class GuestPageTest extends WebTestCase
         $last = $subjectMedias[\count($subjectMedias) - 1];
         foreach ([$first, $last] as $media) {
             self::assertSelectorExists(
-                'img[alt="' . $media->getTitle() . '"]',
+                'img[alt="'.$media->getTitle().'"]',
                 'Repère visuel : le titre du média est exposé en attribut alt.'
             );
             self::assertStringContainsString(
@@ -80,7 +80,7 @@ class GuestPageTest extends WebTestCase
         self::assertStringNotContainsString(
             $foreignMedia->getPath(),
             $html,
-            'Aucun média de l’invité « ' . (string) $otherGuest->getEmail() . ' » ne doit figurer sur cette fiche.'
+            'Aucun média de l’invité « '.(string) $otherGuest->getEmail().' » ne doit figurer sur cette fiche.'
         );
     }
 

@@ -2,9 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Album;
 use App\Entity\Media;
-use App\Entity\User;
 use App\Repository\AlbumRepository;
 use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -17,8 +15,9 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
     public function __construct(
         private AlbumRepository $albumRepository,
         private UserRepository $userRepository,
-        private EntityManagerInterface $manager
-    ){}
+        private EntityManagerInterface $manager,
+    ) {
+    }
 
     public function getDependencies(): array
     {
@@ -43,7 +42,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         $counter = 0;
 
         foreach ($albums as $album) {
-            for ($i = 0; $i < 10; $i++){
+            for ($i = 0; $i < 10; ++$i) {
                 $uploadNumber = str_pad(strval($counter + 1), 4, '0', STR_PAD_LEFT); // Make sure the number has four digits (ex: 0025)
 
                 $media = new Media();
@@ -53,7 +52,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
                 $media->setPath("uploads/$uploadNumber.jpg");
 
                 $this->manager->persist($media);
-                $counter++;
+                ++$counter;
             }
         }
     }
@@ -63,7 +62,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         $guests = $this->userRepository->findBy(['admin' => false]);
         $uploadCounter = 51;
         foreach ($guests as $guest) {
-            for ($i = 0; $i < 50; $i++){
+            for ($i = 0; $i < 50; ++$i) {
                 $uploadNumber = str_pad(strval($uploadCounter), 4, '0', STR_PAD_LEFT); // Make sure the number has four digits (ex: 0063)
 
                 $media = new Media();
@@ -73,7 +72,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
                 $media->setPath("uploads/$uploadNumber.jpg");
 
                 $this->manager->persist($media);
-                $uploadCounter++;
+                ++$uploadCounter;
             }
         }
     }

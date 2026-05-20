@@ -46,7 +46,7 @@ class GuestsListTest extends WebTestCase
             'Un invité sans accès ne doit pas figurer dans la liste.'
         );
         self::assertStringContainsString(
-            self::FIXTURE_ACTIVE_GUEST_LINE_PREFIX . self::EXPECTED_MEDIA_COUNT_PER_FIXTURE_GUEST . ')',
+            self::FIXTURE_ACTIVE_GUEST_LINE_PREFIX.self::EXPECTED_MEDIA_COUNT_PER_FIXTURE_GUEST.')',
             $content,
             'Un invité actif attendu (fixtures) doit apparaître avec son compteur de photos.'
         );
@@ -76,7 +76,7 @@ class GuestsListTest extends WebTestCase
             );
             if (str_contains($text, 'Invité ')) {
                 self::assertStringContainsString(
-                    '(' . self::EXPECTED_MEDIA_COUNT_PER_FIXTURE_GUEST . ')',
+                    '('.self::EXPECTED_MEDIA_COUNT_PER_FIXTURE_GUEST.')',
                     $text,
                     'MediaFixtures : 50 photos par invité nommé « Invité n ».'
                 );

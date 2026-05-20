@@ -24,16 +24,16 @@ class UserTest extends TestCase
         $user->setHasAccess(true);
         $user->setMedias($collection);
 
-        $this->assertTrue($user->getEmail() === 'test@test.com');
-        $this->assertTrue($user->getPassword() === 'test');
+        $this->assertTrue('test@test.com' === $user->getEmail());
+        $this->assertTrue('test' === $user->getPassword());
         $this->assertTrue($user->isAdmin());
-        $this->assertTrue($user->getName() === 'test');
+        $this->assertTrue('test' === $user->getName());
         $this->assertTrue($user->getRoles() === ['ROLE_ADMIN', 'ROLE_USER']);
-        $this->assertTrue($user->getDescription() === 'test');
+        $this->assertTrue('test' === $user->getDescription());
         $this->assertTrue($user->hasAccess());
         $this->assertTrue($user->getMedias()->contains($media));
-        $this->assertTrue($user->getId() === null);
-        $this->assertTrue($user->getUserIdentifier() === 'test@test.com');
+        $this->assertTrue(null === $user->getId());
+        $this->assertTrue('test@test.com' === $user->getUserIdentifier());
     }
 
     public function testIsFalse(): void
@@ -42,7 +42,6 @@ class UserTest extends TestCase
         $media = new Media();
         $collection = $user->getMedias();
         $collection->add($media);
-
 
         $user->setEmail('test@test.com');
         $user->setPassword('test');
@@ -53,16 +52,16 @@ class UserTest extends TestCase
         $user->setHasAccess(false);
         $user->setMedias($collection);
 
-        $this->assertFalse($user->getEmail() === 'false');
-        $this->assertFalse($user->getPassword() === 'false');
+        $this->assertFalse('false' === $user->getEmail());
+        $this->assertFalse('false' === $user->getPassword());
         $this->assertFalse($user->isAdmin());
-        $this->assertFalse($user->getName() === 'false');
-        $this->assertFalse($user->getRoles() === []);
-        $this->assertFalse($user->getDescription() === 'false');
+        $this->assertFalse('false' === $user->getName());
+        $this->assertFalse([] === $user->getRoles());
+        $this->assertFalse('false' === $user->getDescription());
         $this->assertFalse($user->hasAccess());
         $this->assertFalse($user->getMedias()->contains(new Media()));
         $this->assertFalse(is_int($user->getId()));
-        $this->assertFalse($user->getUserIdentifier() === 'false');
+        $this->assertFalse('false' === $user->getUserIdentifier());
     }
 
     public function testIsEmpty(): void
@@ -73,7 +72,7 @@ class UserTest extends TestCase
         $this->assertEmpty($user->getPassword());
         $this->assertEmpty($user->getName());
         $this->assertEmpty($user->getDescription());
-        $this->assertTrue(count($user->getMedias()) === 0);
+        $this->assertTrue(0 === count($user->getMedias()));
         $this->assertEmpty($user->getId());
         $this->assertEmpty($user->getUserIdentifier());
     }

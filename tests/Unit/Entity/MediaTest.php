@@ -23,11 +23,11 @@ class MediaTest extends TestCase
         $media->setAlbum($album);
         $media->setFile($file);
 
-        $this->assertTrue($media->getPath() === 'public/uploads/0001.jpg');
-        $this->assertTrue($media->getTitle() === 'test');
+        $this->assertTrue('public/uploads/0001.jpg' === $media->getPath());
+        $this->assertTrue('test' === $media->getTitle());
         $this->assertTrue($media->getUser() === $user);
         $this->assertTrue($media->getAlbum() === $album);
-        $this->assertTrue($media->getId() === null);
+        $this->assertTrue(null === $media->getId());
         $this->assertTrue($media->getFile() === $file);
     }
 
@@ -44,8 +44,8 @@ class MediaTest extends TestCase
         $media->setAlbum($album);
         $media->setFile($file);
 
-        $this->assertFalse($media->getPath() === 'false');
-        $this->assertFalse($media->getTitle() === 'false');
+        $this->assertFalse('false' === $media->getPath());
+        $this->assertFalse('false' === $media->getTitle());
         $this->assertFalse($media->getUser() === new User());
         $this->assertFalse($media->getAlbum() === new Album());
         $this->assertFalse(is_int($media->getId()));

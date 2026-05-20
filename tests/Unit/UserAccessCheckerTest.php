@@ -12,7 +12,7 @@ class UserAccessCheckerTest extends TestCase
 {
     public function testPreAuthForUserWithNoAccess(): void
     {
-        $user = new User;
+        $user = new User();
         $checker = new UserAccessChecker();
 
         $user->setHasAccess(false);
@@ -26,7 +26,7 @@ class UserAccessCheckerTest extends TestCase
         $this->expectNotToPerformAssertions();
 
         try {
-            $user = new User;
+            $user = new User();
             $checker = new UserAccessChecker();
 
             $user->setHasAccess(true);

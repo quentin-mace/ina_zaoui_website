@@ -10,7 +10,7 @@ class AlbumFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        for ($i = 1; $i <= 5 ; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $album = new Album();
             $album->setName('Album '.$i);
 
