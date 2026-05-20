@@ -1,0 +1,50 @@
+name: "Tâche (refactor / doc / perf)"
+description: "Refactoring, documentation, optimisation de performances ou maintenance"
+title: "[Refactor | Doc | Perf] "
+body:
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: Type de tâche
+      options:
+        - Refactoring
+        - Documentation
+        - Performance
+        - Maintenance
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte
+      description: "Pourquoi cette tâche est-elle nécessaire ? Quel problème ou dette technique adresse-t-elle ?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_state
+    attributes:
+      label: État actuel
+      description: "Décrivez l'état actuel du code, de la doc ou des performances."
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Objectif
+      description: "Décrivez l'état cible attendu après réalisation de la tâche."
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: attention_points
+    attributes:
+      label: Points d'attention
+      description: "Cochez les zones à surveiller lors de l'implémentation."
+      options:
+        - label: Requêtes Doctrine / risque N+1
+        - label: Sécurité
+        - label: Rétrocompatibilité
+        - label: Mise à jour de la documentation (README, docs/)

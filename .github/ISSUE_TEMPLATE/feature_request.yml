@@ -1,0 +1,49 @@
+name: "Amélioration / Nouvelle fonctionnalité"
+description: "Proposer une amélioration ou une nouvelle fonctionnalité"
+title: "[Feature] "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte
+      description: "Quel problème cherchez-vous à résoudre ? Quel besoin est à l'origine de cette demande ?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: Comportement actuel
+      description: "Comment les choses fonctionnent-elles aujourd'hui (si applicable) ?"
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: Comportement attendu
+      description: "Décrivez la fonctionnalité souhaitée et le résultat attendu."
+    validations:
+      required: true
+
+  - type: textarea
+    id: approach
+    attributes:
+      label: Approche envisagée
+      description: "Avez-vous une idée de la façon dont cela pourrait être implémenté ? (optionnel)"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact potentiel
+      description: "Cochez les domaines touchés par cette fonctionnalité."
+      options:
+        - label: Migrations Doctrine
+        - label: Configuration
+        - label: Sécurité
+        - label: Performances (risque N+1 ?)
+        - label: Templates / UI
