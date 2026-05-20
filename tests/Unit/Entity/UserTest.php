@@ -61,7 +61,7 @@ class UserTest extends TestCase
         $this->assertFalse($user->getDescription() === 'false');
         $this->assertFalse($user->hasAccess());
         $this->assertFalse($user->getMedias()->contains(new Media()));
-        $this->assertFalse($user->getId() === !null);
+        $this->assertFalse(is_int($user->getId()));
         $this->assertFalse($user->getUserIdentifier() === 'false');
     }
 
@@ -73,7 +73,7 @@ class UserTest extends TestCase
         $this->assertEmpty($user->getPassword());
         $this->assertEmpty($user->getName());
         $this->assertEmpty($user->getDescription());
-        $this->assertEmpty($user->getMedias());
+        $this->assertTrue(count($user->getMedias()) === 0);
         $this->assertEmpty($user->getId());
         $this->assertEmpty($user->getUserIdentifier());
     }

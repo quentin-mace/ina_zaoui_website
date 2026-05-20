@@ -9,6 +9,7 @@ use App\Repository\AlbumRepository;
 use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
@@ -20,13 +21,13 @@ class HomeController extends AbstractController
     ){
     }
     #[Route('/', name: 'home')]
-    public function home()
+    public function home(): Response
     {
         return $this->render('front/home.html.twig');
     }
 
     #[Route('/guests', name: 'guests')]
-    public function guests(UserRepository $userRepository)
+    public function guests(UserRepository $userRepository): Response
     {
         $guests = $this->cache->get('guests', function (ItemInterface $item) use ($userRepository) {
             $item->expiresAfter(3600);
@@ -40,7 +41,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/guest/{id}', name: 'guest')]
-    public function guest(int $id, UserRepository $userRepository)
+    public function guest(int $id, UserRepository $userRepository): Response
     {
         $cacheItemName = 'guest_' . $id;
         $guest = $this->cache->get($cacheItemName, function (ItemInterface $item) use ($id, $userRepository) {
@@ -61,12 +62,12 @@ class HomeController extends AbstractController
         AlbumRepository $albumRepository,
         MediaRepository $mediaRepository,
         ?int $id = null,
-    ){
+    ): Response {
         $albums = $albumRepository->findAll();
         $album = $id ? $albumRepository->find($id) : null;
         $user = $userRepository->findOneByAdmin(true);
 
-        $inaAlbumCacheName = 'inaMedias_' . $album?->getId() ?? 'global';
+        $inaAlbumCacheName = 'inaMedias_' . ($album?->getId() ?? 'global');
 
         $medias = $this->cache->get($inaAlbumCacheName, function (ItemInterface $item) use ($mediaRepository, $album, $user) {
             $item->expiresAfter(3600);
@@ -85,7 +86,7 @@ class HomeController extends AbstractController
     }
 
     #[Route('/about', name: 'about')]
-    public function about()
+    public function about(): Response
     {
         return $this->render('front/about.html.twig');
     }

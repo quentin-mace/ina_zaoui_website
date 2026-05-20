@@ -44,7 +44,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($albums as $album) {
             for ($i = 0; $i < 10; $i++){
-                $uploadNumber = str_pad(($counter + 1), 4, '0', STR_PAD_LEFT); // Make sure the number has four digits (ex: 0025)
+                $uploadNumber = str_pad(strval($counter + 1), 4, '0', STR_PAD_LEFT); // Make sure the number has four digits (ex: 0025)
 
                 $media = new Media();
                 $media->setUser($ina);
@@ -64,7 +64,7 @@ class MediaFixtures extends Fixture implements DependentFixtureInterface
         $uploadCounter = 51;
         foreach ($guests as $guest) {
             for ($i = 0; $i < 50; $i++){
-                $uploadNumber = str_pad(($uploadCounter), 4, '0', STR_PAD_LEFT); // Make sure the number has four digits (ex: 0063)
+                $uploadNumber = str_pad(strval($uploadCounter), 4, '0', STR_PAD_LEFT); // Make sure the number has four digits (ex: 0063)
 
                 $media = new Media();
                 $media->setUser($guest);

@@ -24,7 +24,7 @@ class AlbumTest extends TestCase
         $album->setName('test');
 
         $this->assertFalse($album->getName() === 'false');
-        $this->assertFalse($album->getId() === !null);
+        $this->assertFalse(is_int($album->getId()));
     }
 
     public function testIsEmpty(): void

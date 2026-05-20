@@ -48,7 +48,7 @@ class MediaTest extends TestCase
         $this->assertFalse($media->getTitle() === 'false');
         $this->assertFalse($media->getUser() === new User());
         $this->assertFalse($media->getAlbum() === new Album());
-        $this->assertFalse($media->getId() === !null);
+        $this->assertFalse(is_int($media->getId()));
         $this->assertFalse($media->getFile() === new UploadedFile('public/uploads/0002.jpg', 'test'));
     }
 
