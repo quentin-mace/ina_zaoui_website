@@ -15,7 +15,7 @@ class MediaTest extends TestCase
         $media = new Media();
         $user = new User();
         $album = new Album();
-        $file = new UploadedFile('public/uploads/0001.jpg', 'test');
+        $file = new UploadedFile('public/uploads/0001.jpg', 'test', null, null, true);
 
         $media->setPath('public/uploads/0001.jpg');
         $media->setTitle('test');
@@ -36,7 +36,7 @@ class MediaTest extends TestCase
         $media = new Media();
         $user = new User();
         $album = new Album();
-        $file = new UploadedFile('public/uploads/0001.jpg', 'test');
+        $file = new UploadedFile('public/uploads/0001.jpg', 'test', null, null, true);
 
         $media->setPath('public/uploads/0001.jpg');
         $media->setTitle('test');
