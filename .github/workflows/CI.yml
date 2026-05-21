@@ -75,10 +75,10 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 3306:3306
+          - 3307:3306
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: critipixel
+          MYSQL_DATABASE: ina_zaoui_test
         options: >-
           --health-cmd "mysqladmin ping -h 127.0.0.1 -u root -proot"
           --health-interval 10s
