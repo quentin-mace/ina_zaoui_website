@@ -17,6 +17,8 @@
 À l'affichage, pour chaque invité, l'ORM fait une requête pour aller rechercher les médias associés (pour les compter).
 Le nombre de requêtes augmente donc en fonction du nombre d'entités (problème N+1).
 
+Mise en place de caches sur les pages ou c'est nécéssaire dans le home controller.
+
 ## Action corrective
 
 Au moment de la récupération des entités User en BDD, mise en place d'un left join qui récupère les Médias associés en mème temps. On réduit ainsi le nombre de requêtes nécessaires.
