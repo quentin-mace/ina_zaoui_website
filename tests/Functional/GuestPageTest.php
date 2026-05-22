@@ -7,6 +7,7 @@ use App\Repository\MediaRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Fiche invité (/guest/{id}) : médias alignés sur l’utilisateur affiché.
@@ -82,6 +83,24 @@ class GuestPageTest extends WebTestCase
             $html,
             'Aucun média de l’invité « '.(string) $otherGuest->getEmail().' » ne doit figurer sur cette fiche.'
         );
+    }
+
+    public function testGuestClosureExecutesOnCacheMiss(): void
+    {
+        $client = static::createClient();
+
+        /** @var TagAwareCacheInterface $cache */
+        $cache = static::getContainer()->get('cache.app.taggable');
+        $cache->invalidateTags(['guests']);
+
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        $guest = $userRepository->findOneBy(['email' => self::FIXTURE_EMAIL_SUBJECT]);
+        self::assertInstanceOf(User::class, $guest);
+
+        $this->logInAsFixtureGuest($client);
+        $client->request('GET', '/guest/'.$guest->getId());
+
+        self::assertResponseIsSuccessful();
     }
 
     private function logInAsFixtureGuest(KernelBrowser $client): void

@@ -28,7 +28,9 @@ class Media
     private string $title;
 
     #[Assert\Image(
-        maxSize: '2M'
+        maxSize: '2M',
+        maxSizeMessage: 'Le fichier est trop volumineux !',
+        mimeTypesMessage: 'Le type de fichier n\'est pas bon. Ce doit être une image !',
     )]
     private ?UploadedFile $file = null;
 

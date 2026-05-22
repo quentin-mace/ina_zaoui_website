@@ -8,20 +8,19 @@
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%206-8892BF?logo=php&logoColor=white)](https://phpstan.org/)
 [![PHP CS Fixer](https://img.shields.io/badge/PHP--CS--Fixer-PSR--12-8892BF?logo=php&logoColor=white)](https://cs.symfony.com/)
 
-Site vitrine et portfolio (photographe), avec un espace d’administration pour gérer invités et médias. Application **Symfony 7.4** (PHP ≥ 8.4).
+Site vitrine et portfolio (photographe), avec un espace d'administration pour gérer invités et médias. Application **Symfony 7.4** (PHP ≥ 8.4).
 
 ## Sommaire
 
 - [Prérequis](#prérequis)
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Démarrer / arrêter l’environnement (Docker)](#démarrer--arrêter-lenvironnement-docker)
-  - [Lancer l’application en développement](#lancer-lapplication-en-développement)
+  - [Démarrer / arrêter l'environnement (Docker)](#démarrer--arrêter-lenvironnement-docker)
+  - [Lancer l'application en développement](#lancer-lapplication-en-développement)
   - [Base de données (Doctrine)](#base-de-données-doctrine)
   - [Données de dev (fixtures + uploads)](#données-de-dev-fixtures--uploads)
 - [Compte de démo (admin)](#compte-de-démo-admin)
-- [Tests](#tests)
-- [Qualité du code](#qualité-du-code)
+- [Architecture et fonctionnement](#architecture-et-fonctionnement)
 - [Crédits](#crédits)
 
 ## Prérequis
@@ -42,7 +41,7 @@ Ces étapes installent les dépendances PHP, démarrent la base MySQL (Docker) e
    composer install
    ```
 
-2. **Configurer l’environnement local** : le fichier `.env` versionné contient un `DATABASE_URL` générique ; pour travailler avec le conteneur MySQL, **créer** `.env.local` à partir de l’exemple (identifiants alignés sur Docker : utilisateur / mot de passe `app`, port hôte **3307**) :
+2. **Configurer l'environnement local** : le fichier `.env` versionné contient un `DATABASE_URL` générique ; pour travailler avec le conteneur MySQL, **créer** `.env.local` à partir de l'exemple (identifiants alignés sur Docker : utilisateur / mot de passe `app`, port hôte **3307**) :
 
    ```bash
    cp .env.local.example .env.local
@@ -74,7 +73,7 @@ Ces étapes installent les dépendances PHP, démarrent la base MySQL (Docker) e
 
 ## Usage
 
-### Démarrer / arrêter l’environnement (Docker)
+### Démarrer / arrêter l'environnement (Docker)
 
 - **Démarrer MySQL + Adminer** :
 
@@ -94,7 +93,7 @@ Ces étapes installent les dépendances PHP, démarrent la base MySQL (Docker) e
   docker compose down
   ```
 
-### Lancer l’application en développement
+### Lancer l'application en développement
 
 Au choix :
 
@@ -108,7 +107,7 @@ ou, sans Symfony CLI :
 php -S 127.0.0.1:8000 -t public
 ```
 
-Ouvrir l’URL indiquée (souvent `http://127.0.0.1:8000`).
+Ouvrir l'URL indiquée (souvent `http://127.0.0.1:8000`).
 
 ### Base de données (Doctrine)
 
@@ -135,69 +134,72 @@ Ensuite, téléchargez [cette archive](https://s3.eu-west-1.amazonaws.com/course
 
 Après `doctrine:fixtures:load`, un compte administrateur est disponible :
 
-- **E-mail** : `ina@zaoui.com`  
+- **E-mail** : `ina@zaoui.com`
 - **Mot de passe** : `password`
 
 Les invités de démo utilisent le même mot de passe (`password`) avec des adresses du type `invite+0@example.com`, etc.
 
-## Tests
+## Architecture et fonctionnement
 
-En `APP_ENV=test`, **`DATABASE_URL` est défini dans `.env.test`** (base `ina_zaoui_test`, utilisateur `root`, mot de passe identique à `MYSQL_ROOT_PASSWORD` dans `compose.yml`, soit `root` avec la configuration par défaut). Ce fichier est chargé après `.env` et `.env.local`, donc le développement local continue d’utiliser `.env.local` sans modification pour lancer les tests.
+L'application expose deux faces distinctes, chacune avec ses propres contrôleurs et templates.
 
-**Prérequis** : conteneur MySQL démarré (`docker compose up -d`).
+### Face publique (`/`)
 
-1. **Créer la base de test** (si elle n’existe pas) :
+Accessible à tous. Présente le portfolio et les pages invités.
 
-   ```bash
-   php bin/console doctrine:database:create --env=test --if-not-exists
-   ```
+| Contrôleur | Route | Rôle |
+|---|---|---|
+| `HomeController` | `/` | Page d'accueil, portfolio, à propos |
+| — | `/guests` | Liste des invités |
+| — | `/guest/{id}` | Page personnelle d'un invité (médias) |
 
-2. **Appliquer le schéma** :
+L'accès à la page d'un invité est contrôlé par `UserAccessChecker` (`src/Security/`) : seul l'invité concerné (ou un admin) peut voir ses médias.
 
-   ```bash
-   php bin/console doctrine:migrations:migrate --env=test -n
-   ```
+### Espace d'administration (`/admin`)
 
-3. **Charger les fixtures** (les mêmes classes que pour le dev : `UserFixtures`, `AlbumFixtures`, `MediaFixtures`) :
+Réservé aux utilisateurs avec le rôle `ROLE_ADMIN`. Protégé par un formulaire de connexion (`SecurityController`).
 
-   ```bash
-   php bin/console doctrine:fixtures:load --env=test -n
-   ```
+| Contrôleur | Périmètre |
+|---|---|
+| `Admin/AlbumController` | CRUD albums |
+| `Admin/GuestController` | CRUD invités |
+| `Admin/MediaController` | Upload et gestion des médias |
+| `Admin/SecurityController` | Authentification |
 
-   Cette commande **vide puis repeuple** la base de test.
+### Entités
 
-4. **Lancer la suite PHPUnit** :
-
-   ```bash
-   php bin/phpunit
-   ```
-
-Les médias référencés par les fixtures pointent vers des chemins du type `public/uploads/….jpg`. Pour des vérifications manuelles ou des tests qui servent ces fichiers, réutilisez la même étape que pour le dev (archive S3 + copie du dossier `uploads` dans `public/uploads`).
-
-## Qualité du code
-
-### PHPStan (analyse statique)
-
-Configuré via `phpstan.dist.neon` au **niveau 6**, avec l'extension Doctrine.
-
-```bash
-vendor/bin/phpstan analyse
+```
+User        — compte utilisateur (admin ou invité)
+  └── Album — album photo appartenant à un invité
+        └── Media — fichier média appartenant à un album
 ```
 
-### PHP CS Fixer (formatage)
+- `User` : roles `ROLE_ADMIN` ou `ROLE_USER`. Les invités sont des `User` sans accès à l'admin.
+- `Album` : appartient à un `User`. Contient une collection de `Media`.
+- `Media` : référence un fichier stocké dans `public/uploads/`.
 
-Configuré via `.php-cs-fixer.dist.php`.
+### Structure des répertoires clés
 
-```bash
-# Vérifier sans modifier
-vendor/bin/php-cs-fixer check
-
-# Corriger automatiquement
-vendor/bin/php-cs-fixer fix
 ```
+src/
+  Controller/       — contrôleurs (Admin/ + HomeController)
+  Entity/           — entités Doctrine (User, Album, Media)
+  Form/             — formulaires Symfony
+  Repository/       — requêtes Doctrine personnalisées
+  Security/         — UserAccessChecker
+  Migrations/       — migrations Doctrine versionnées
+templates/
+  front/            — templates face publique
+  admin/            — templates espace admin
+tests/
+  Unit/             — tests unitaires (entités, UserAccessChecker)
+  Functional/       — tests fonctionnels (requêtes HTTP via WebTestCase)
+```
+
+Pour contribuer, exécuter les tests ou utiliser les outils d'analyse, voir [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Crédits
 
-Projet réalisé dans le cadre du cours **« Refactorisez le code d'un site pour l'optimiser »** du parcours **Concepteur Développeur d’Application** (OpenClassrooms).
+Projet réalisé dans le cadre du cours **« Refactorisez le code d'un site pour l'optimiser »** du parcours **Concepteur Développeur d'Application** (OpenClassrooms).
 
 Le code de base a été fourni par OpenClassrooms via le dépôt : `https://github.com/OpenClassrooms-Student-Center/876-p15-inazaoui`.
