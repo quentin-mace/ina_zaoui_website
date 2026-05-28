@@ -10,12 +10,30 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MediaTest extends TestCase
 {
+    private string $tempFile;
+    private string $tempFile2;
+
+    protected function setUp(): void
+    {
+        $this->tempFile = tempnam(sys_get_temp_dir(), 'media_test_');
+        $this->tempFile2 = tempnam(sys_get_temp_dir(), 'media_test_');
+    }
+
+    protected function tearDown(): void
+    {
+        foreach ([$this->tempFile, $this->tempFile2] as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
+    }
+
     public function testIsTrue(): void
     {
         $media = new Media();
         $user = new User();
         $album = new Album();
-        $file = new UploadedFile('public/uploads/0001.jpg', 'test');
+        $file = new UploadedFile($this->tempFile, 'test.jpg');
 
         $media->setPath('public/uploads/0001.jpg');
         $media->setTitle('test');
@@ -36,7 +54,7 @@ class MediaTest extends TestCase
         $media = new Media();
         $user = new User();
         $album = new Album();
-        $file = new UploadedFile('public/uploads/0001.jpg', 'test');
+        $file = new UploadedFile($this->tempFile, 'test.jpg');
 
         $media->setPath('public/uploads/0001.jpg');
         $media->setTitle('test');
@@ -49,7 +67,7 @@ class MediaTest extends TestCase
         $this->assertFalse($media->getUser() === new User());
         $this->assertFalse($media->getAlbum() === new Album());
         $this->assertFalse(is_int($media->getId()));
-        $this->assertFalse($media->getFile() === new UploadedFile('public/uploads/0002.jpg', 'test'));
+        $this->assertFalse($media->getFile() === new UploadedFile($this->tempFile2, 'test2.jpg'));
     }
 
     public function testIsEmpty(): void
