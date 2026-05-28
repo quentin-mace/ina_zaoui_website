@@ -10,6 +10,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Portfolio : vue « toutes les photos » (médias d’Ina) vs filtre par album, navigation et cohérence du contenu.
@@ -126,6 +127,38 @@ class PortfolioPageTest extends WebTestCase
         $crawler = $client->getCrawler();
         self::assertStringContainsString('active', (string) $crawler->selectLink('Toutes')->attr('class'));
         self::assertStringNotContainsString('active', (string) $crawler->selectLink('Album 3')->attr('class'));
+    }
+
+    public function testPortfolioGlobalClosureExecutesOnCacheMiss(): void
+    {
+        $client = static::createClient();
+
+        /** @var TagAwareCacheInterface $cache */
+        $cache = static::getContainer()->get('cache.app.taggable');
+        $cache->invalidateTags(['ina']);
+
+        $this->logInAsFixtureGuest($client);
+        $client->request('GET', '/portfolio');
+
+        self::assertResponseIsSuccessful();
+    }
+
+    public function testPortfolioAlbumClosureExecutesOnCacheMiss(): void
+    {
+        $client = static::createClient();
+
+        /** @var TagAwareCacheInterface $cache */
+        $cache = static::getContainer()->get('cache.app.taggable');
+        $cache->invalidateTags(['ina']);
+
+        $albumRepository = static::getContainer()->get(AlbumRepository::class);
+        $album = $albumRepository->findOneBy(['name' => 'Album 1']);
+        self::assertInstanceOf(Album::class, $album);
+
+        $this->logInAsFixtureGuest($client);
+        $client->request('GET', '/portfolio/'.$album->getId());
+
+        self::assertResponseIsSuccessful();
     }
 
     private function assertPortfolioMediaCountMatches(Crawler $crawler, int $expected): void

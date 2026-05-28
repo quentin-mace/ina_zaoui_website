@@ -5,6 +5,7 @@ namespace App\Tests\Functional;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
 /**
  * Liste des invités (/guests) : filtrage hasAccess, compteur de médias par ligne.
@@ -82,6 +83,23 @@ class GuestsListTest extends WebTestCase
                 );
             }
         });
+    }
+
+    public function testGuestsClosureExecutesOnCacheMiss(): void
+    {
+        $client = static::createClient();
+
+        /** @var TagAwareCacheInterface $cache */
+        $cache = static::getContainer()->get('cache.app.taggable');
+        $cache->invalidateTags(['guests']);
+
+        $this->logInAsFixtureGuestWithAccess($client);
+        $crawler = $client->request('GET', '/guests');
+
+        self::assertResponseIsSuccessful();
+
+        $rows = $crawler->filter('.guests .guest');
+        self::assertGreaterThan(0, $rows->count());
     }
 
     private function logInAsFixtureGuestWithAccess(KernelBrowser $client): void
