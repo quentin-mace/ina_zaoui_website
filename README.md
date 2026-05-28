@@ -17,7 +17,6 @@ Site vitrine et portfolio (photographe), avec un espace d'administration pour g�
 - [Usage](#usage)
   - [Démarrer / arrêter l'environnement (Docker)](#démarrer--arrêter-lenvironnement-docker)
   - [Lancer l'application en développement](#lancer-lapplication-en-développement)
-  - [Base de données (Doctrine)](#base-de-données-doctrine)
   - [Données de dev (fixtures + uploads)](#données-de-dev-fixtures--uploads)
 - [Compte de démo (admin)](#compte-de-démo-admin)
 - [Architecture et fonctionnement](#architecture-et-fonctionnement)
@@ -108,15 +107,6 @@ php -S 127.0.0.1:8000 -t public
 ```
 
 Ouvrir l'URL indiquée (souvent `http://127.0.0.1:8000`).
-
-### Base de données (Doctrine)
-
-Après démarrage de MySQL (Docker) :
-
-```bash
-php bin/console doctrine:database:create --if-not-exists
-php bin/console doctrine:migrations:migrate -n
-```
 
 ### Données de dev (fixtures + uploads)
 
